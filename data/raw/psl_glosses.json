@@ -1,0 +1,30 @@
+[
+    {
+        "gloss": "RUN",
+        "meanings": [
+            "run",
+            "operate",
+            "flow"
+        ],
+        "context_notes": "Meaning depends on whether the subject is a human, a machine, or a liquid.",
+        "examples": [
+            "He runs every morning",
+            "The engine is running",
+            "Water runs through the canal"
+        ]
+    },
+    {
+        "gloss": "LIGHT",
+        "meanings": [
+            "illumination",
+            "lightweight",
+            "ignite"
+        ],
+        "context_notes": "Interpretation depends heavily on surrounding signs and sentence context.",
+        "examples": [
+            "Turn on the light",
+            "This bag is light",
+            "Light the candle"
+        ]
+    }
+]
