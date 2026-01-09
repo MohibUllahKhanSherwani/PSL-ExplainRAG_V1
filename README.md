@@ -25,7 +25,19 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - Generated **local semantic embeddings** using a sentence-transformer model
 - Built a **local FAISS vector store** for PSL knowledge
 - Implemented **similarity-based retrieval** for PSL-related queries
-- Verified retrieval with natural-language questions (e.g. *“What does RUN mean in PSL?”*)
+- Verified retrieval with natural-language questions (e.g. *"What does RUN mean in PSL?"*)
+
+### Day 3 – Confidence Scoring & Explanation Layer
+- Implemented **deterministic confidence heuristics** (HIGH / MEDIUM / LOW)
+  - Absolute score thresholds
+  - Score delta analysis for ambiguity detection
+  - Agreement checking across retrieved chunks
+- Built a **template-based explanation engine** (no LLM required)
+  - **Direct** answers for HIGH confidence matches
+  - **Tentative** answers for MEDIUM confidence matches
+  - **Refusal** responses for LOW confidence (avoids hallucination)
+- Added **ambiguity detection** (within-gloss and across-results)
+- Designed **LLM-ready output structure** for future integration
 
 ---
 
@@ -40,10 +52,11 @@ PSL-ExplainRAG/
 │   ├── ingestion/     # Data loading and chunking
 │   ├── embeddings/    # Local embedding model
 │   ├── vectorstore/   # FAISS vector index
-│   └── retrieval/     # Similarity-based retrieval
+│   ├── retrieval/     # Similarity-based retrieval + confidence scoring
+│   └── explanation/   # Template-based explanation synthesis
 │
 ├── data/
-│   └── raw/           # PSL gloss knowledge
+│   └── raw/           # PSL gloss knowledge (8 glosses)
 │
 ├── scripts/
 │   ├── ingest_psl_data.py
@@ -97,42 +110,68 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Run Day 1: Ingestion & Chunking
-```bash
-python -m scripts.ingest_psl_data
-```
-This will:
-- Load PSL gloss knowledge
-- Generate semantic chunks
-- Print a preview chunk to the console
-
-### 5. Run Day 2: Build Vector Store & Query
+### 4. Run the Full Pipeline
 ```bash
 python -m scripts.build_and_query_index
 ```
-This will:
-- Embed PSL semantic chunks locally
-- Build a FAISS vector index
-- Retrieve the most relevant PSL explanation for a sample query
 
-#### Example Query
-`What does RUN mean in PSL?`  
-The system retrieves the most relevant PSL context based on semantic similarity.
+This will:
+- Load PSL gloss knowledge (8 entries)
+- Generate semantic chunks
+- Build a FAISS vector index
+- Run test queries with confidence scoring
+- Generate grounded explanations
+
+---
+
+## Example Output
+
+```
+QUERY: What does RUN mean in PSL?
+============================================================
+Answer Type: DIRECT
+Confidence: HIGH
+Primary Gloss: RUN
+Has Ambiguity: True (within_gloss)
+
+--- EXPLANATION ---
+The PSL sign "RUN" can mean: run, operate, flow.
+Meaning depends on whether the subject is a human, a machine, or a liquid.
+Examples: He runs every morning | The engine is running
+
+Ambiguity detected: Consider the context: Meaning depends on whether the 
+subject is a human, a machine, or a liquid.
+```
+
+---
+
+## Confidence Levels
+
+| Level | Score Range | Response |
+|-------|-------------|----------|
+| **HIGH** | < 0.9 | Direct answer with full context |
+| **MEDIUM** | 0.9 - 1.4 | Tentative answer with caveats |
+| **LOW** | > 1.4 | Refusal — avoids hallucination |
 
 ---
 
 ## Tech Stack
-- **Python**
-- **LangChain**
-- **Sentence-Transformers** (local embeddings)
-- **FAISS** (local vector store)
-- **Pydantic**
-- **Loguru**
+- **Python 3.11**
+- **LangChain** (text splitting, vector store integration)
+- **Sentence-Transformers** (local embeddings with `all-MiniLM-L6-v2`)
+- **FAISS** (local vector similarity search)
+- **Pydantic** (data validation)
+- **Loguru** (structured logging)
+
+---
 
 ## Next Steps
-- Add explanation generation on top of retrieved context
-- Introduce confidence checks and refusal logic
-- Expose retrieval and explanation via an API
+- [ ] Persist FAISS index to avoid rebuilding on each run
+- [ ] Expose retrieval and explanation via a FastAPI endpoint
+- [ ] Integrate LLM for natural language explanation generation
+- [ ] Add more PSL glosses to the knowledge base
+
+---
 
 ## Notes
 This project is intentionally kept local and reproducible to emphasize understanding of RAG fundamentals, system design, and applied AI reasoning.

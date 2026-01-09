@@ -26,5 +26,89 @@
             "This bag is light",
             "Light the candle"
         ]
+    },
+    {
+        "gloss": "HELLO",
+        "meanings": [
+            "hello",
+            "greet",
+            "welcome"
+        ],
+        "context_notes": "Standard greeting sign. Can be formal or informal depending on facial expression.",
+        "examples": [
+            "Hello, how are you?",
+            "She greeted everyone warmly",
+            "Welcome to our home"
+        ]
+    },
+    {
+        "gloss": "EAT",
+        "meanings": [
+            "eat",
+            "food",
+            "meal"
+        ],
+        "context_notes": "Basic sign for eating. Hand moves toward mouth repeatedly.",
+        "examples": [
+            "I want to eat",
+            "The food is delicious",
+            "Let's have a meal together"
+        ]
+    },
+    {
+        "gloss": "WATER",
+        "meanings": [
+            "water",
+            "drink",
+            "thirsty"
+        ],
+        "context_notes": "Context determines if referring to water specifically or drinking in general.",
+        "examples": [
+            "I need water",
+            "Can I have a drink?",
+            "I am thirsty"
+        ]
+    },
+    {
+        "gloss": "HELP",
+        "meanings": [
+            "help",
+            "assist",
+            "support"
+        ],
+        "context_notes": "Used for asking or offering assistance. Intensity shows urgency.",
+        "examples": [
+            "Please help me",
+            "Can you assist with this?",
+            "I need support"
+        ]
+    },
+    {
+        "gloss": "THANK",
+        "meanings": [
+            "thank you",
+            "grateful",
+            "appreciate"
+        ],
+        "context_notes": "Expression of gratitude. Often accompanied by a smile.",
+        "examples": [
+            "Thank you very much",
+            "I am grateful for your help",
+            "I appreciate it"
+        ]
+    },
+    {
+        "gloss": "FAMILY",
+        "meanings": [
+            "family",
+            "relatives",
+            "household"
+        ],
+        "context_notes": "Refers to family unit. Can specify immediate or extended family with modifiers.",
+        "examples": [
+            "My family is important",
+            "I visited my relatives",
+            "Our household is big"
+        ]
     }
 ]
