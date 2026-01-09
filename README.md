@@ -55,6 +55,14 @@ PSL-ExplainRAG/
 
 ---
 
+## Requirements
+
+- **Python 3.11** (recommended) — Python 3.13 has compatibility issues with PyTorch
+- **Visual C++ Redistributable** (Windows) — Required for PyTorch DLLs
+  - Download: https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+---
+
 ## How to Run the Project
 
 ### 1. Clone the Repository
@@ -63,13 +71,25 @@ git clone https://github.com/MohibUllahKhanSherwani/PSL-ExplainRAG_V1.git
 cd PSL-ExplainRAG_V1
 ```
 
-### 2. Create and Activate a Virtual Environment (Recommended)
+### 2. Create and Activate a Virtual Environment
+
+**Windows (Command Prompt):**
+```cmd
+py -3.11 -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+py -3.11 -m venv .venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate
+```
+
+**macOS/Linux:**
 ```bash
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
+python3.11 -m venv .venv
+source .venv/bin/activate
 ```
 
 ### 3. Install Dependencies
@@ -79,7 +99,7 @@ pip install -r requirements.txt
 
 ### 4. Run Day 1: Ingestion & Chunking
 ```bash
-python scripts/ingest_psl_data.py
+python -m scripts.ingest_psl_data
 ```
 This will:
 - Load PSL gloss knowledge
@@ -88,7 +108,7 @@ This will:
 
 ### 5. Run Day 2: Build Vector Store & Query
 ```bash
-python scripts/build_and_query_index.py
+python -m scripts.build_and_query_index
 ```
 This will:
 - Embed PSL semantic chunks locally

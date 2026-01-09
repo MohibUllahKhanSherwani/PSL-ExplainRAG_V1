@@ -1,4 +1,4 @@
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from typing import List
 from app.core.logger import logger
 

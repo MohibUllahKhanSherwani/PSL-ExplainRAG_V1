@@ -1,6 +1,8 @@
 pydantic
 loguru
-langchain-text-splitters
 langchain
+langchain-text-splitters
+langchain-community
+langchain-huggingface
 sentence-transformers
 faiss-cpu
