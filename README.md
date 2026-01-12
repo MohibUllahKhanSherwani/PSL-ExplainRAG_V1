@@ -39,7 +39,15 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - Added **ambiguity detection** (within-gloss and across-results)
 - Designed **LLM-ready output structure** for future integration
 
----
+### Day 4 – LLM Renderer Layer (Optional)
+- Added **optional LLM rendering** using Ollama (local, no API)
+  - Enabled via `--use-llm` flag (defaults to deterministic templates)
+  - LLM acts purely as **text formatter** — no reasoning
+- Implemented **strict renderer prompt** (non-expert role)
+- Added **guardrail validation** (length + content checks)
+  - Blocks hallucinated terms and answer patterns in refused responses
+- System fully functions without LLM using template summaries
+
 
 ## Project Structure
 
@@ -53,7 +61,8 @@ PSL-ExplainRAG/
 │   ├── embeddings/    # Local embedding model
 │   ├── vectorstore/   # FAISS vector index
 │   ├── retrieval/     # Similarity-based retrieval + confidence scoring
-│   └── explanation/   # Template-based explanation synthesis
+│   ├── explanation/   # Template-based explanation synthesis
+│   └── rendering/     # Optional LLM rendering (Day 4)
 │
 ├── data/
 │   └── raw/           # PSL gloss knowledge (8 glosses)
@@ -74,9 +83,22 @@ PSL-ExplainRAG/
 - **Visual C++ Redistributable** (Windows) — Required for PyTorch DLLs
   - Download: https://aka.ms/vs/17/release/vc_redist.x64.exe
 
+### Optional: Ollama (for LLM Rendering)
+
+If you want to use the `--use-llm` flag for natural language rendering:
+
+1. **Install Ollama**: Download from https://ollama.com/download (~1.2GB)
+2. **Pull the model**:
+   ```bash
+   ollama pull llama3.2:1b
+   ```
+3. **Recommended model**: `llama3.2:1b` (~1.3GB) — fast, good for rendering-only tasks
+
+> **Note**: The system works 100% without Ollama using deterministic templates.
+
 ---
 
-## How to Run the Project
+## How to Run the Project (I personally used CMD to run this project and activate environment)
 
 ### 1. Clone the Repository
 ```bash
@@ -112,7 +134,11 @@ pip install -r requirements.txt
 
 ### 4. Run the Full Pipeline
 ```bash
+# Default mode (deterministic templates, no LLM required)
 python -m scripts.build_and_query_index
+
+# With LLM rendering (requires Ollama installed)
+python -m scripts.build_and_query_index --use-llm
 ```
 
 This will:
@@ -121,6 +147,7 @@ This will:
 - Build a FAISS vector index
 - Run test queries with confidence scoring
 - Generate grounded explanations
+- (Optional) Render via LLM if `--use-llm` flag is set
 
 ---
 
@@ -162,13 +189,14 @@ subject is a human, a machine, or a liquid.
 - **FAISS** (local vector similarity search)
 - **Pydantic** (data validation)
 - **Loguru** (structured logging)
+- **Ollama** (optional, local LLM for natural language rendering)
 
 ---
 
 ## Next Steps
 - [ ] Persist FAISS index to avoid rebuilding on each run
 - [ ] Expose retrieval and explanation via a FastAPI endpoint
-- [ ] Integrate LLM for natural language explanation generation
+- [x] ~~Integrate LLM for natural language explanation generation~~ ✅ Done (Day 4)
 - [ ] Add more PSL glosses to the knowledge base
 
 ---
