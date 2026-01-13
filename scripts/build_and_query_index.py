@@ -51,9 +51,10 @@ def main():
 
     # Test queries to demonstrate explanation generation
     test_queries = [
-        "What does RUN mean in PSL?",           # Direct match, within-gloss ambiguity
-        "How do I greet someone?",               # Direct match (HELLO)
-        "I need assistance",                     # MEDIUM confidence
+        "What does RUN mean in PSL?",            # HIGH confidence - direct
+        "How do I say YES?",                     # HIGH confidence - new gloss
+        "What is the sign for SCHOOL?",          # HIGH confidence - new gloss
+        "I am feeling HAPPY",                    # HIGH confidence - new gloss
         "What is the weather like?",             # LOW confidence - refused
     ]
 

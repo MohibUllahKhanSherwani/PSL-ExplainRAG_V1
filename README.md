@@ -39,8 +39,8 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - Added **ambiguity detection** (within-gloss and across-results)
 - Designed **LLM-ready output structure** for future integration
 
-### Day 4 – LLM Renderer Layer (Optional)
-- Added **optional LLM rendering** using Ollama (local, no API)
+### Day 4 – LLM Renderer Layer
+- Added **LLM rendering** using Ollama (local, no API)
   - Enabled via `--use-llm` flag (defaults to deterministic templates)
   - LLM acts purely as **text formatter** — no reasoning
 - Implemented **strict renderer prompt** (non-expert role)
@@ -56,6 +56,7 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - **Safety Contract**: 
   - Strict precedence: Failures checked before explanation.
   - **LLM Bypass**: Terminal failures (OOD/No data) strictly skip LLM rendering.
+- **Expanded Knowledge Base**: Added 11 new glosses (Family, Emotions, Time, etc.) -> Total 19 entries.
 
 ## Project Structure
 
@@ -70,10 +71,10 @@ PSL-ExplainRAG/
 │   ├── vectorstore/   # FAISS vector index
 │   ├── retrieval/     # Similarity-based retrieval + confidence scoring
 │   ├── explanation/   # Template-based explanation synthesis
-│   └── rendering/     # Optional LLM rendering (Day 4)
+│   └── rendering/     # LLM rendering 
 │
 ├── data/
-│   └── raw/           # PSL gloss knowledge (8 glosses)
+│   └── raw/           # PSL gloss knowledge (19 glosses)
 │
 ├── scripts/
 │   ├── ingest_psl_data.py

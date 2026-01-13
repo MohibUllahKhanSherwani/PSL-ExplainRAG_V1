@@ -110,5 +110,148 @@
             "I visited my relatives",
             "Our household is big"
         ]
+    },
+    {
+        "gloss": "MOTHER",
+        "meanings": [
+            "mother",
+            "mom",
+            "maternal"
+        ],
+        "context_notes": "Female parent. Hand usually touches chin/cheek area.",
+        "examples": [
+            "My mother is kind",
+            "I love my mom"
+        ]
+    },
+    {
+        "gloss": "FATHER",
+        "meanings": [
+            "father",
+            "dad",
+            "paternal"
+        ],
+        "context_notes": "Male parent. Hand usually touches forehead area.",
+        "examples": [
+            "Where is your father?",
+            "My dad is working"
+        ]
+    },
+    {
+        "gloss": "YES",
+        "meanings": [
+            "yes",
+            "agree",
+            "affirmative"
+        ],
+        "context_notes": "Head nod or specific hand sign (fist bobbing). Signals agreement.",
+        "examples": [
+            "Yes, I can do it",
+            "I agree with you"
+        ]
+    },
+    {
+        "gloss": "NO",
+        "meanings": [
+            "no",
+            "refuse",
+            "disagree"
+        ],
+        "context_notes": "Head shake or hand wave. Signals negation/refusal.",
+        "examples": [
+            "No, do not touch",
+            "I refuse to go"
+        ]
+    },
+    {
+        "gloss": "PLEASE",
+        "meanings": [
+            "please",
+            "request",
+            "kindly"
+        ],
+        "context_notes": "Rubbing chest with flat hand. Used for polite requests.",
+        "examples": [
+            "Please help me",
+            "Kindly wait here"
+        ]
+    },
+    {
+        "gloss": "TODAY",
+        "meanings": [
+            "today",
+            "now",
+            "presently"
+        ],
+        "context_notes": "Indicates current day or time. Often double bounce of Y-hands.",
+        "examples": [
+            "We go today",
+            "Do it now"
+        ]
+    },
+    {
+        "gloss": "TOMORROW",
+        "meanings": [
+            "tomorrow",
+            "future",
+            "later"
+        ],
+        "context_notes": "Thumb moves forward on cheek. Indicates day after today.",
+        "examples": [
+            "See you tomorrow",
+            "We will meet later"
+        ]
+    },
+    {
+        "gloss": "HAPPY",
+        "meanings": [
+            "happy",
+            "joy",
+            "glad"
+        ],
+        "context_notes": "Open hands patting chest slightly upwards. Positive emotion.",
+        "examples": [
+            "I am so happy",
+            "He is full of joy"
+        ]
+    },
+    {
+        "gloss": "SAD",
+        "meanings": [
+            "sad",
+            "upset",
+            "unhappy"
+        ],
+        "context_notes": "Hands dragging down face area. Negative/low emotion.",
+        "examples": [
+            "Why are you sad?",
+            "Don't be upset"
+        ]
+    },
+    {
+        "gloss": "SCHOOL",
+        "meanings": [
+            "school",
+            "education",
+            "study"
+        ],
+        "context_notes": "Clapping hands horizontally (teacher/student context).",
+        "examples": [
+            "I go to school",
+            "Education is important"
+        ]
+    },
+    {
+        "gloss": "HOME",
+        "meanings": [
+            "home",
+            "house",
+            "residence"
+        ],
+        "context_notes": "Hand moves from mouth to ear (eating + sleeping).",
+        "examples": [
+            "I am going home",
+            "This is my house"
+        ]
     }
 ]
