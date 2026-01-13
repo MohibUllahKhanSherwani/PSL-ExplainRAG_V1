@@ -3,6 +3,8 @@ from typing import List, Optional, Literal
 import re
 from app.retrieval.confidence import ScoredResult, ConfidenceLevel
 from app.core.logger import logger
+from app.domain.diagnostics import RetrievalDiagnostics, FailureReason
+from app.retrieval.failure import classify_failure
 
 
 @dataclass
@@ -23,6 +25,10 @@ class Explanation:
     query: str
     answer_type: Literal["direct", "tentative", "refused"]
     confidence: ConfidenceLevel
+    
+    # Failure Awareness (Day 5)
+    failure_reason: FailureReason = FailureReason.NONE
+    diagnostics: Optional[RetrievalDiagnostics] = None
     
     # Primary gloss information (if found)
     primary_gloss: Optional[str] = None
@@ -132,11 +138,22 @@ class ExplanationEngine:
         answer_type: Literal["direct", "tentative", "refused"],
         parsed: Optional[ParsedGloss],
         has_ambiguity: bool,
-        disambiguation_hint: Optional[str]
+        disambiguation_hint: Optional[str],
+        failure_reason: FailureReason = FailureReason.NONE
     ) -> str:
         """Generate human-readable summary using templates."""
         
         if answer_type == "refused":
+            # Specialized failure messages based on FailureReason
+            if failure_reason == FailureReason.POOR_QUALITY_MATCH:
+                return (
+                    "I don't have reliable information for this query.\n"
+                    "The retrieved matches were low quality (Out of Domain).\n"
+                    "Consider rephrasing or asking about a specific PSL sign."
+                )
+            elif failure_reason == FailureReason.NO_MATCHES:
+                return "No matching PSL signs were found in the knowledge base."
+            
             if parsed:
                 return (
                     f"I don't have reliable information for this query.\n"
@@ -145,7 +162,7 @@ class ExplanationEngine:
                 )
             return (
                 "I don't have reliable information for this query.\n"
-                "No matching PSL signs were found in the knowledge base."
+                "No reliably matching PSL signs were found."
             )
         
         if not parsed:
@@ -177,19 +194,30 @@ class ExplanationEngine:
     def generate_explanation(
         self, 
         query: str, 
-        results: List[ScoredResult]
+        results: List[ScoredResult],
+        diagnostics: RetrievalDiagnostics
     ) -> Explanation:
         """
         Main entry point: Generate a structured explanation from retrieval results.
+        Includes failure classification handling.
         """
-        if not results:
-            return Explanation(
+        raw_chunks = [r.content for r in results]
+        
+        # 1. Deterministic Failure Classification
+        classified_failure = classify_failure(diagnostics, raw_chunks)
+        diagnostics.failure_reason = classified_failure  # Stamp logic onto diagnostics
+        
+        # 2. Handle Terminal Failures Immediately
+        if classified_failure in [FailureReason.NO_MATCHES, FailureReason.DATA_INCOMPLETE, FailureReason.POOR_QUALITY_MATCH]:
+             return Explanation(
                 query=query,
                 answer_type="refused",
                 confidence=ConfidenceLevel.LOW,
-                summary="No results found for this query."
+                failure_reason=classified_failure,
+                diagnostics=diagnostics,
+                summary=self.render_summary("refused", None, False, None, classified_failure)
             )
-        
+
         # Get confidence from first result
         confidence = results[0].confidence
         
@@ -217,6 +245,8 @@ class ExplanationEngine:
             query=query,
             answer_type=answer_type,
             confidence=confidence,
+            failure_reason=classified_failure,
+            diagnostics=diagnostics,
             primary_gloss=primary.gloss if primary else None,
             primary_meanings=primary.meanings if primary else [],
             has_ambiguity=has_ambiguity,

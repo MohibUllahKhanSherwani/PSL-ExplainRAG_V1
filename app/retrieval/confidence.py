@@ -20,10 +20,13 @@ class ScoredResult:
 
 
 # Configurable thresholds (tuned for MiniLM-L6-v2 model)
-SCORE_HIGH_THRESHOLD = 0.9      # Below this = HIGH confidence candidate
-SCORE_LOW_THRESHOLD = 1.4       # Above this = LOW confidence
-DELTA_AMBIGUITY_THRESHOLD = 0.1 # Delta below this = ambiguous results
-DELTA_CLEAR_THRESHOLD = 0.3     # Delta above this = clear winner
+# Imported from centralized config to ensure consistency
+from app.core.config import (
+    SCORE_HIGH_THRESHOLD,
+    OOD_L2_THRESHOLD as SCORE_LOW_THRESHOLD,
+    AMBIGUITY_DELTA_THRESHOLD,
+    AMBIGUITY_CLEAR_THRESHOLD
+)
 
 
 def extract_gloss(chunk: str) -> str:
@@ -57,9 +60,15 @@ def compute_confidence(
     # Rule 2: Delta check (requires 2+ results)
     if len(scores) >= 2:
         delta = scores[1] - scores[0]
-        if delta < DELTA_AMBIGUITY_THRESHOLD and best_score > SCORE_HIGH_THRESHOLD:
-            logger.debug(f"LOW confidence: ambiguous (delta={delta:.3f}, score={best_score:.3f})")
-            return ConfidenceLevel.LOW
+        # 3. Check for ambiguity (similar scores with different glosses)
+        # Only check if scores are close AND we aren't already confident
+        if delta < AMBIGUITY_DELTA_THRESHOLD and best_score > SCORE_HIGH_THRESHOLD:
+            return ConfidenceLevel.MEDIUM
+            
+        # 4. Check for Clear Winner
+        # If delta is large, we are very confident
+        if delta > AMBIGUITY_CLEAR_THRESHOLD:
+            return ConfidenceLevel.HIGH
     
     # Rule 3: Agreement check (requires 2+ chunks)
     if len(chunks) >= 2:

@@ -49,6 +49,14 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - System fully functions without LLM using template summaries
 
 
+### Day 5 – Measurable Retrieval & Failure Awareness
+- **Telemetry**: Exposes metrics (`score_delta`, `result_density`) for debugging.
+- **Diagnostics**: `RetrievalDiagnostics` object attached to every result.
+- **Failure Taxonomy**: Explicit enum (`POOR_QUALITY`, `COLLISION`, `NO_MATCHES`).
+- **Safety Contract**: 
+  - Strict precedence: Failures checked before explanation.
+  - **LLM Bypass**: Terminal failures (OOD/No data) strictly skip LLM rendering.
+
 ## Project Structure
 
 ```
@@ -190,6 +198,7 @@ subject is a human, a machine, or a liquid.
 - **Pydantic** (data validation)
 - **Loguru** (structured logging)
 - **Ollama** (optional, local LLM for natural language rendering)
+- **NumPy** (metrics & density calculation)
 
 ---
 

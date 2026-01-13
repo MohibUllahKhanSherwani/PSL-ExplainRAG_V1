@@ -7,6 +7,7 @@ from app.vectorstore.faiss_store import build_faiss_index
 from app.retrieval.retriever import retrieve_relevant_chunks
 from app.explanation.explainer import ExplanationEngine
 from app.rendering.llm_renderer import LLMRenderer
+from app.domain.diagnostics import RetrievalDiagnostics, FailureReason
 from app.core.logger import logger
 
 
@@ -56,30 +57,50 @@ def main():
         "What is the weather like?",             # LOW confidence - refused
     ]
 
+    # Process each query
     for query in test_queries:
         logger.info(f"\n{'='*60}")
         logger.info(f"QUERY: {query}")
         logger.info(f"{'='*60}")
         
-        # Retrieve relevant chunks
-        results = retrieve_relevant_chunks(query, vectorstore)
+        # 3. Retrieve relevant chunks (returns results + diagnostics)
+        results, diagnostics = retrieve_relevant_chunks(query, vectorstore, k=3)
         
-        # Generate explanation (deterministic)
-        explanation = explainer.generate_explanation(query, results)
+        # 4. Generate deterministic explanation
+        explanation = explainer.generate_explanation(query, results, diagnostics)
+        
+        # Log Diagnostics (Day 5 Measurement)
+        if diagnostics:
+            logger.info(f"Diagnostics | Top Score: {diagnostics.top_score:.3f} | Delta: {diagnostics.score_delta:.3f} | Density: {diagnostics.result_density:.3f} | Diversity: {diagnostics.gloss_diversity}")
+            if diagnostics.failure_reason != FailureReason.NONE:
+                logger.warning(f"Failure Detected: {diagnostics.failure_reason.value}")
         
         # Display structured output
         logger.info(f"Answer Type: {explanation.answer_type.upper()}")
         logger.info(f"Confidence: {explanation.confidence.value}")
         logger.info(f"Primary Gloss: {explanation.primary_gloss}")
         logger.info(f"Has Ambiguity: {explanation.has_ambiguity} ({explanation.ambiguity_type})")
-        
+
         # Display response
-        logger.info(f"\n--- TEMPLATE RESPONSE ---\n{explanation.summary}")
+        logger.info(f"\n--- TEMPLATE RESPONSE ---\n{explanation.summary}\n")
         
-        # Optional LLM rendering
-        if llm_renderer:
-            llm_response = llm_renderer.render_safe(explanation)
-            logger.info(f"\n--- LLM RESPONSE ---\n{llm_response}")
+        # 5. Optional LLM Rendering (Day 4 + Day 5 Safety Contract)
+        if args.use_llm and llm_renderer and llm_renderer.is_available():
+            # STRICT LLM FAILURE CONTRACT (Day 5)
+            # Bypass LLM for terminal failures
+            terminal_failures = [
+                FailureReason.NO_MATCHES, 
+                FailureReason.DATA_INCOMPLETE, 
+                FailureReason.POOR_QUALITY_MATCH
+            ]
+            
+            if explanation.failure_reason in terminal_failures:
+                logger.info(f"LLM Bypassed due to terminal failure: {explanation.failure_reason.value}")
+            else:
+                llm_response = llm_renderer.render_safe(explanation)
+                logger.info(f"\n--- LLM RESPONSE ---\n{llm_response}")
+        
+        logger.info("="*60)
 
 
 if __name__ == "__main__":
