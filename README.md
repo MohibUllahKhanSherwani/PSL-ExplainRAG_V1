@@ -57,6 +57,11 @@ This project helps explore how **retrieval-augmented approaches** can ground and
   - Strict precedence: Failures checked before explanation.
   - **LLM Bypass**: Terminal failures (OOD/No data) strictly skip LLM rendering.
 - **Expanded Knowledge Base**: Added 11 new glosses (Family, Emotions, Time, etc.) -> Total 19 entries.
+  
+### Day 6 – Minimal LangChain Integration
+- **Bridge Pattern**: Wraps deterministic components in `BaseRetriever` and `RunnableLambda`.
+- **Orchestration, Not Reasoning**: LangChain handles the *flow* (Query -> Retriever -> Explainer -> Renderer) but **DOES NOT** make decisions.
+- **Why?**: Satisfies integration requirements while preserving 100% of the strict failure handling safety contract.
 
 ## Project Structure
 
