@@ -176,12 +176,21 @@ This will:
 - (Optional) Render via LLM if `--use-llm` flag is set
 
 ### 5. Run as API Service (FastAPI)
-```bash
-# Start the server
+```cmd
+:: Start the server
 uvicorn main:app --reload
+```
 
-# Test with curl or PowerShell
-curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d '{"query": "How do I say YES?"}'
+**Test queries (CMD):**
+```cmd
+:: High confidence query (ambiguity - multiple meanings)
+curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"How do I say YES?\"}"
+
+:: OOD query (refusal)
+curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"What is the weather like?\"}"
+
+:: Direct query
+curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"What does RUN mean?\"}"
 ```
 
 **Response format** (exactly one field):
