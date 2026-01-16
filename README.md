@@ -63,18 +63,28 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - **Orchestration, Not Reasoning**: LangChain handles the *flow* (Query -> Retriever -> Explainer -> Renderer) but **DOES NOT** make decisions.
 - **Why?**: Satisfies integration requirements while preserving 100% of the strict failure handling safety contract.
 
+### Day 7 – FastAPI Minimal Service
+- **Transport-Only**: FastAPI acts as a thin I/O shell with zero domain logic.
+- **Single Endpoint**: `POST /query` accepts `{"query": "string"}` and returns exactly one of:
+  - `{"answer": "..."}` — Direct or tentative response
+  - `{"ambiguity": {"candidates": [...]}}` — Multiple meanings or competing glosses
+  - `{"refusal": "..."}` — Out-of-domain or low-confidence rejection
+- **Pydantic Validation**: `model_validator` enforces exactly-one-of response constraint.
+- **Removable**: Deleting `main.py` does not break the core system.
+
 ## Project Structure
 
 ```
 PSL-ExplainRAG/
 │
 ├── app/
+│   ├── bridge/        # LangChain wrappers (Day 6)
 │   ├── core/          # Logging and core utilities
-│   ├── domain/        # PSL domain schema
+│   ├── domain/        # PSL domain schema + diagnostics
 │   ├── ingestion/     # Data loading and chunking
 │   ├── embeddings/    # Local embedding model
 │   ├── vectorstore/   # FAISS vector index
-│   ├── retrieval/     # Similarity-based retrieval + confidence scoring
+│   ├── retrieval/     # Retrieval + confidence scoring + failure classification
 │   ├── explanation/   # Template-based explanation synthesis
 │   └── rendering/     # LLM rendering 
 │
@@ -83,8 +93,10 @@ PSL-ExplainRAG/
 │
 ├── scripts/
 │   ├── ingest_psl_data.py
-│   └── build_and_query_index.py
+│   ├── build_and_query_index.py
+│   └── test_langchain.py
 │
+├── main.py            # FastAPI service (Day 7)
 ├── requirements.txt
 └── README.md
 ```
@@ -146,7 +158,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Run the Full Pipeline
+### 4. Run the Full Pipeline (CLI Mode)
 ```bash
 # Default mode (deterministic templates, no LLM required)
 python -m scripts.build_and_query_index
@@ -156,12 +168,28 @@ python -m scripts.build_and_query_index --use-llm
 ```
 
 This will:
-- Load PSL gloss knowledge (8 entries)
+- Load PSL gloss knowledge (19 entries)
 - Generate semantic chunks
 - Build a FAISS vector index
 - Run test queries with confidence scoring
 - Generate grounded explanations
 - (Optional) Render via LLM if `--use-llm` flag is set
+
+### 5. Run as API Service (FastAPI)
+```bash
+# Start the server
+uvicorn main:app --reload
+
+# Test with curl or PowerShell
+curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d '{"query": "How do I say YES?"}'
+```
+
+**Response format** (exactly one field):
+```json
+{"answer": "..."}
+{"ambiguity": {"candidates": ["yes", "agree", "affirmative"]}}
+{"refusal": "I don't have reliable information..."}
+```
 
 ---
 
@@ -198,10 +226,11 @@ subject is a human, a machine, or a liquid.
 
 ## Tech Stack
 - **Python 3.11**
-- **LangChain** (text splitting, vector store integration)
+- **FastAPI** (REST API layer)
+- **LangChain** (orchestration, text splitting)
 - **Sentence-Transformers** (local embeddings with `all-MiniLM-L6-v2`)
 - **FAISS** (local vector similarity search)
-- **Pydantic** (data validation)
+- **Pydantic** (request/response validation)
 - **Loguru** (structured logging)
 - **Ollama** (optional, local LLM for natural language rendering)
 - **NumPy** (metrics & density calculation)
@@ -210,9 +239,10 @@ subject is a human, a machine, or a liquid.
 
 ## Next Steps
 - [ ] Persist FAISS index to avoid rebuilding on each run
-- [ ] Expose retrieval and explanation via a FastAPI endpoint
+- [x] ~~Expose retrieval and explanation via a FastAPI endpoint~~ ✅ Done (Day 7)
 - [x] ~~Integrate LLM for natural language explanation generation~~ ✅ Done (Day 4)
 - [ ] Add more PSL glosses to the knowledge base
+- [ ] Lightweight evaluation pass (Precision@k, ambiguity rate)
 
 ---
 
