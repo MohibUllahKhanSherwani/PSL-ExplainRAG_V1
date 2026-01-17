@@ -1,0 +1,347 @@
+{
+  "results": [
+    {
+      "query_id": 1,
+      "query": "What does RUN mean in PSL?",
+      "expected_gloss": "RUN",
+      "expected_outcome": "answer",
+      "actual_gloss": "RUN",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "RUN",
+        "PLEASE",
+        "HELP"
+      ],
+      "top_k_scores": [
+        0.811215877532959,
+        1.3158975839614868,
+        1.3301703929901123
+      ],
+      "score_delta": 0.5046817064285278,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 2,
+      "query": "How do I say YES?",
+      "expected_gloss": "YES",
+      "expected_outcome": "ambiguity",
+      "actual_gloss": "YES",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "YES",
+        "THANK",
+        "HELLO"
+      ],
+      "top_k_scores": [
+        1.244187593460083,
+        1.5948092937469482,
+        1.6170921325683594
+      ],
+      "score_delta": 0.35062170028686523,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 3,
+      "query": "Sign for HELLO greeting",
+      "expected_gloss": "HELLO",
+      "expected_outcome": "answer",
+      "actual_gloss": "HELLO",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "HELLO",
+        "THANK",
+        "TOMORROW"
+      ],
+      "top_k_scores": [
+        0.514216423034668,
+        1.1684110164642334,
+        1.3675470352172852
+      ],
+      "score_delta": 0.6541945934295654,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 4,
+      "query": "What is the weather like today?",
+      "expected_gloss": null,
+      "expected_outcome": "refusal",
+      "actual_gloss": "HELLO",
+      "actual_outcome": "refusal",
+      "top_k_glosses": [
+        "HELLO",
+        "PLEASE",
+        "TOMORROW"
+      ],
+      "top_k_scores": [
+        1.5391453504562378,
+        1.5984067916870117,
+        1.628211498260498
+      ],
+      "score_delta": 0.059261441230773926,
+      "failure_reason": "POOR_QUALITY_MATCH",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 5,
+      "query": "How to sign cryptocurrency trading?",
+      "expected_gloss": null,
+      "expected_outcome": "refusal",
+      "actual_gloss": "YES",
+      "actual_outcome": "refusal",
+      "top_k_glosses": [
+        "YES",
+        "EAT",
+        "HELLO"
+      ],
+      "top_k_scores": [
+        1.5660191774368286,
+        1.7108128070831299,
+        1.7409542798995972
+      ],
+      "score_delta": 0.14479362964630127,
+      "failure_reason": "POOR_QUALITY_MATCH",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 6,
+      "query": "HAPPY emotion sign",
+      "expected_gloss": "HAPPY",
+      "expected_outcome": "answer",
+      "actual_gloss": "TOMORROW",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "TOMORROW",
+        "SAD",
+        "THANK"
+      ],
+      "top_k_scores": [
+        1.0368123054504395,
+        1.1221296787261963,
+        1.2868585586547852
+      ],
+      "score_delta": 0.08531737327575684,
+      "failure_reason": "AMBIGUOUS_COLLISION",
+      "correct_retrieval": false,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 7,
+      "query": "SAD feeling",
+      "expected_gloss": "SAD",
+      "expected_outcome": "answer",
+      "actual_gloss": "SAD",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "SAD",
+        "TOMORROW",
+        "THANK"
+      ],
+      "top_k_scores": [
+        1.3962322473526,
+        1.613175868988037,
+        1.6773991584777832
+      ],
+      "score_delta": 0.216943621635437,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 8,
+      "query": "Sign for LIGHT",
+      "expected_gloss": "LIGHT",
+      "expected_outcome": "ambiguity",
+      "actual_gloss": "LIGHT",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "LIGHT",
+        "YES",
+        "TOMORROW"
+      ],
+      "top_k_scores": [
+        0.7981021404266357,
+        1.3604518175125122,
+        1.464073657989502
+      ],
+      "score_delta": 0.5623496770858765,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 9,
+      "query": "MOTHER or MOM sign",
+      "expected_gloss": "MOTHER",
+      "expected_outcome": "answer",
+      "actual_gloss": "MOTHER",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "MOTHER",
+        "FAMILY",
+        "HELLO"
+      ],
+      "top_k_scores": [
+        1.091036081314087,
+        1.4862253665924072,
+        1.5347025394439697
+      ],
+      "score_delta": 0.3951892852783203,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 10,
+      "query": "DAD sign in PSL",
+      "expected_gloss": "FATHER",
+      "expected_outcome": "answer",
+      "actual_gloss": "MOTHER",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "MOTHER",
+        "FAMILY",
+        "HELP"
+      ],
+      "top_k_scores": [
+        1.391406774520874,
+        1.4271938800811768,
+        1.4985136985778809
+      ],
+      "score_delta": 0.035787105560302734,
+      "failure_reason": "AMBIGUOUS_COLLISION",
+      "correct_retrieval": false,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 11,
+      "query": "TODAY or NOW",
+      "expected_gloss": "TODAY",
+      "expected_outcome": "ambiguity",
+      "actual_gloss": "PLEASE",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "PLEASE",
+        "TOMORROW",
+        "HELLO"
+      ],
+      "top_k_scores": [
+        1.3588436841964722,
+        1.4700400829315186,
+        1.9123891592025757
+      ],
+      "score_delta": 0.11119639873504639,
+      "failure_reason": "NONE",
+      "correct_retrieval": false,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 12,
+      "query": "What is quantum physics?",
+      "expected_gloss": null,
+      "expected_outcome": "refusal",
+      "actual_gloss": "EAT",
+      "actual_outcome": "refusal",
+      "top_k_glosses": [
+        "EAT",
+        "LIGHT",
+        "WATER"
+      ],
+      "top_k_scores": [
+        1.7531676292419434,
+        1.7831592559814453,
+        1.863677978515625
+      ],
+      "score_delta": 0.029991626739501953,
+      "failure_reason": "POOR_QUALITY_MATCH",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 13,
+      "query": "WATER drink thirsty",
+      "expected_gloss": "WATER",
+      "expected_outcome": "ambiguity",
+      "actual_gloss": "WATER",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "WATER",
+        "RUN",
+        "EAT"
+      ],
+      "top_k_scores": [
+        0.7384250164031982,
+        1.5450263023376465,
+        1.68775475025177
+      ],
+      "score_delta": 0.8066012859344482,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": true
+    },
+    {
+      "query_id": 14,
+      "query": "SCHOOL education",
+      "expected_gloss": "SCHOOL",
+      "expected_outcome": "answer",
+      "actual_gloss": "SAD",
+      "actual_outcome": "refusal",
+      "top_k_glosses": [
+        "SAD",
+        "HELP",
+        "HOME"
+      ],
+      "top_k_scores": [
+        1.4125542640686035,
+        1.8921610116958618,
+        1.9155967235565186
+      ],
+      "score_delta": 0.4796067476272583,
+      "failure_reason": "POOR_QUALITY_MATCH",
+      "correct_retrieval": false,
+      "correct_outcome": false
+    },
+    {
+      "query_id": 15,
+      "query": "HOME house residence",
+      "expected_gloss": "HOME",
+      "expected_outcome": "answer",
+      "actual_gloss": "HOME",
+      "actual_outcome": "ambiguity",
+      "top_k_glosses": [
+        "HOME",
+        "FAMILY",
+        "HELLO"
+      ],
+      "top_k_scores": [
+        0.8687410354614258,
+        1.4614417552947998,
+        1.8820602893829346
+      ],
+      "score_delta": 0.592700719833374,
+      "failure_reason": "NONE",
+      "correct_retrieval": true,
+      "correct_outcome": false
+    }
+  ],
+  "metrics": {
+    "total_queries": 15,
+    "top1_retrieval_accuracy": 0.667,
+    "ambiguity_detection_accuracy": 1.0,
+    "false_confident_count": 0,
+    "ood_rejection_rate": 1.0,
+    "overall_outcome_accuracy": 0.467,
+    "breakdown": {
+      "in_domain_queries": 12,
+      "ood_queries": 3,
+      "expected_ambiguous": 4
+    }
+  }
+}

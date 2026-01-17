@@ -1,0 +1,107 @@
+[
+    {
+        "id": 1,
+        "query": "What does RUN mean in PSL?",
+        "expected_gloss": "RUN",
+        "expected_outcome": "answer",
+        "notes": "Direct match, HIGH confidence expected"
+    },
+    {
+        "id": 2,
+        "query": "How do I say YES?",
+        "expected_gloss": "YES",
+        "expected_outcome": "ambiguity",
+        "notes": "Within-gloss ambiguity (yes/agree/affirmative)"
+    },
+    {
+        "id": 3,
+        "query": "Sign for HELLO greeting",
+        "expected_gloss": "HELLO",
+        "expected_outcome": "answer",
+        "notes": "Direct match with context"
+    },
+    {
+        "id": 4,
+        "query": "What is the weather like today?",
+        "expected_gloss": null,
+        "expected_outcome": "refusal",
+        "notes": "OOD query - no weather gloss exists"
+    },
+    {
+        "id": 5,
+        "query": "How to sign cryptocurrency trading?",
+        "expected_gloss": null,
+        "expected_outcome": "refusal",
+        "notes": "OOD query - technical domain not covered"
+    },
+    {
+        "id": 6,
+        "query": "HAPPY emotion sign",
+        "expected_gloss": "HAPPY",
+        "expected_outcome": "answer",
+        "notes": "Direct emotion match"
+    },
+    {
+        "id": 7,
+        "query": "SAD feeling",
+        "expected_gloss": "SAD",
+        "expected_outcome": "answer",
+        "notes": "Near-collision with HAPPY (same emotion category)"
+    },
+    {
+        "id": 8,
+        "query": "Sign for LIGHT",
+        "expected_gloss": "LIGHT",
+        "expected_outcome": "ambiguity",
+        "notes": "Within-gloss ambiguity (illumination/lightweight/ignite)"
+    },
+    {
+        "id": 9,
+        "query": "MOTHER or MOM sign",
+        "expected_gloss": "MOTHER",
+        "expected_outcome": "answer",
+        "notes": "Near-collision with FATHER (same family category)"
+    },
+    {
+        "id": 10,
+        "query": "DAD sign in PSL",
+        "expected_gloss": "FATHER",
+        "expected_outcome": "answer",
+        "notes": "Near-collision with MOTHER, tests synonym retrieval"
+    },
+    {
+        "id": 11,
+        "query": "TODAY or NOW",
+        "expected_gloss": "TODAY",
+        "expected_outcome": "ambiguity",
+        "notes": "Potential collision with TOMORROW (time concepts)"
+    },
+    {
+        "id": 12,
+        "query": "What is quantum physics?",
+        "expected_gloss": null,
+        "expected_outcome": "refusal",
+        "notes": "OOD query - completely unrelated domain"
+    },
+    {
+        "id": 13,
+        "query": "WATER drink thirsty",
+        "expected_gloss": "WATER",
+        "expected_outcome": "ambiguity",
+        "notes": "Within-gloss ambiguity (water/drink/thirsty)"
+    },
+    {
+        "id": 14,
+        "query": "SCHOOL education",
+        "expected_gloss": "SCHOOL",
+        "expected_outcome": "answer",
+        "notes": "Direct match with synonym"
+    },
+    {
+        "id": 15,
+        "query": "HOME house residence",
+        "expected_gloss": "HOME",
+        "expected_outcome": "answer",
+        "notes": "Direct match, tests multiple synonym recognition"
+    }
+]

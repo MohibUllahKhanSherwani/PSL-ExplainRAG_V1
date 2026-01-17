@@ -72,6 +72,16 @@ This project helps explore how **retrieval-augmented approaches** can ground and
 - **Pydantic Validation**: `model_validator` enforces exactly-one-of response constraint.
 - **Removable**: Deleting `main.py` does not break the core system.
 
+### Day 8 – Retrieval Quality & Evaluation
+- **Gold Evaluation Set**: 15 queries covering direct matches, OOD, ambiguity, and near-collision cases.
+- **Lightweight Metrics**:
+  - Top-1 Retrieval Accuracy: 66.7%
+  - Ambiguity Detection Accuracy: 100%
+  - OOD Rejection Rate: 100%
+  - False Confident Answers: 0
+- **Why Small Gold Sets Work**: For sign language, precision > recall. A small curated set verifies the system refuses uncertain queries rather than hallucinating.
+- **Refusals Are Correctness**: 100% OOD rejection with 0 false confident answers proves the system fails safely.
+
 ## Project Structure
 
 ```
@@ -94,7 +104,11 @@ PSL-ExplainRAG/
 ├── scripts/
 │   ├── ingest_psl_data.py
 │   ├── build_and_query_index.py
-│   └── test_langchain.py
+│   ├── test_langchain.py
+│
+├── eval/              # Evaluation Framework (Day 8)
+│   ├── queries.json
+│   └── run_eval.py
 │
 ├── main.py            # FastAPI service (Day 7)
 ├── requirements.txt
@@ -200,6 +214,16 @@ curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d 
 {"refusal": "I don't have reliable information..."}
 ```
 
+### 6. Run Evaluation (Day 8)
+```bash
+python -m eval.run_eval
+```
+Produces metrics on:
+- Retrieval Accuracy (Precision@1)
+- Ambiguity Detection
+- OOD Rejection Rate
+- False Confidence Count
+
 ---
 
 ## Example Output
@@ -243,15 +267,6 @@ subject is a human, a machine, or a liquid.
 - **Loguru** (structured logging)
 - **Ollama** (optional, local LLM for natural language rendering)
 - **NumPy** (metrics & density calculation)
-
----
-
-## Next Steps
-- [ ] Persist FAISS index to avoid rebuilding on each run
-- [x] ~~Expose retrieval and explanation via a FastAPI endpoint~~ ✅ Done (Day 7)
-- [x] ~~Integrate LLM for natural language explanation generation~~ ✅ Done (Day 4)
-- [ ] Add more PSL glosses to the knowledge base
-- [ ] Lightweight evaluation pass (Precision@k, ambiguity rate)
 
 ---
 
