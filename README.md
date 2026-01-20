@@ -219,7 +219,7 @@ curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d 
 python -m eval.run_eval
 ```
 Produces metrics on:
-- Retrieval Accuracy (Precision@1)
+- Retrieval Accuracy
 - Ambiguity Detection
 - OOD Rejection Rate
 - False Confidence Count
