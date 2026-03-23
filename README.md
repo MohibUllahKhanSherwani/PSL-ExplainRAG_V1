@@ -1,274 +1,119 @@
-# PSL-ExplainRAG
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSL-ExplainRAG README</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #c9d1d9;
+            background-color: #0d1117;
+            padding: 45px;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2, h3 { color: #f0f6fc; border-bottom: 1px solid #30363d; padding-bottom: 0.3em; }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+        }
+        .alert-note {
+            color: #f0f6fc;
+            background-color: rgba(33, 38, 45, 0.4);
+            border-color: #30363d;
+            border-left: 5px solid #1f6feb;
+        }
+        code {
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 85%;
+        }
+        pre {
+            background-color: #161b22;
+            padding: 16px;
+            border-radius: 6px;
+            overflow: auto;
+        }
+        pre code { background-color: transparent; }
+        hr { height: 0.25em; background-color: #30363d; border: 0; margin: 24px 0; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>PSL-ExplainRAG: Explorer RAG for Pakistan Sign Language</h1>
 
-PSL-ExplainRAG is a **self-built, exploratory RAG-based knowledge tool** created to help reason about ambiguity and contextual meaning in **Pakistan Sign Language (PSL)** while working on a sign language translation system.
+    <div class="alert alert-note">
+        <strong>🎓 Final Year Project (FYP) Self-Help Tool</strong><br>
+        This project was developed as a personal research and exploratory tool to support my Final Year Project (FYP) on sign language translation. It was designed to help reason about the technical nuances of disambiguating Pakistan Sign Language (PSL).
+    </div>
 
-The project focuses on **structuring PSL linguistic knowledge**, embedding it locally, and retrieving relevant contextual explanations using semantic search. It is designed as a **personal research and learning tool**, not a production system.
+    <p>PSL-ExplainRAG is a <strong>self-built, exploratory RAG-based knowledge tool</strong> created to help reason about ambiguity and contextual meaning in <strong>Pakistan Sign Language (PSL)</strong>.</p>
 
----
+    <hr>
 
-## Project Motivation
+    <h2>Project Motivation</h2>
+    <p>During work on a PSL-based sign language translation system, it became clear that many PSL glosses are <strong>ambiguous without context</strong>. This project helps explore how retrieval-augmented approaches can ground and explain such ambiguity.</p>
 
-During work on a PSL-based sign language translation system, it became clear that many PSL glosses are **ambiguous without context**.  
-This project helps explore how **retrieval-augmented approaches** can ground and explain such ambiguity using structured linguistic knowledge.
+    <h2>Current Capabilities</h2>
+    <ul>
+        <li><strong>Knowledge Ingestion:</strong> PSL domain schema and structured gloss-to-text chunking.</li>
+        <li><strong>Embeddings & Retrieval:</strong> Local similarity search using <code>sentence-transformers</code> and <code>FAISS</code>.</li>
+        <li><strong>Confidence Scoring:</strong> Heuristics for ambiguity detection and hallucination prevention.</li>
+        <li><strong>Explanation Engine:</strong> Grounded explanation synthesis via deterministic templates.</li>
+        <li><strong>LLM Layer:</strong> Optional local rendering via <code>Ollama</code> with strict guardrails.</li>
+        <li><strong>Service & Eval:</strong> thin <code>FastAPI</code> layer and automated evaluation metrics.</li>
+    </ul>
 
----
+    <hr>
 
-## Current Capabilities
-
-### Day 1 – Knowledge Ingestion & Chunking
-- Defined a **PSL domain schema** for gloss-level linguistic knowledge
-- Implemented ingestion of PSL gloss data
-- Converted structured gloss entries into **semantic text chunks**
-- Applied **recursive text splitting** to preserve contextual meaning
-
-### Day 2 – Embeddings & Retrieval
-- Generated **local semantic embeddings** using a sentence-transformer model
-- Built a **local FAISS vector store** for PSL knowledge
-- Implemented **similarity-based retrieval** for PSL-related queries
-- Verified retrieval with natural-language questions (e.g. *"What does RUN mean in PSL?"*)
-
-### Day 3 – Confidence Scoring & Explanation Layer
-- Implemented **deterministic confidence heuristics** (HIGH / MEDIUM / LOW)
-  - Absolute score thresholds
-  - Score delta analysis for ambiguity detection
-  - Agreement checking across retrieved chunks
-- Built a **template-based explanation engine** (no LLM required)
-  - **Direct** answers for HIGH confidence matches
-  - **Tentative** answers for MEDIUM confidence matches
-  - **Refusal** responses for LOW confidence (avoids hallucination)
-- Added **ambiguity detection** (within-gloss and across-results)
-- Designed **LLM-ready output structure** for future integration
-
-### Day 4 – LLM Renderer Layer
-- Added **LLM rendering** using Ollama (local, no API)
-  - Enabled via `--use-llm` flag (defaults to deterministic templates)
-  - LLM acts purely as **text formatter** — no reasoning
-- Implemented **strict renderer prompt** (non-expert role)
-- Added **guardrail validation** (length + content checks)
-  - Blocks hallucinated terms and answer patterns in refused responses
-- System fully functions without LLM using template summaries
-
-
-### Day 5 – Measurable Retrieval & Failure Awareness
-- **Telemetry**: Exposes metrics (`score_delta`, `result_density`) for debugging.
-- **Diagnostics**: `RetrievalDiagnostics` object attached to every result.
-- **Failure Taxonomy**: Explicit enum (`POOR_QUALITY`, `COLLISION`, `NO_MATCHES`).
-- **Safety Contract**: 
-  - Strict precedence: Failures checked before explanation.
-  - **LLM Bypass**: Terminal failures (OOD/No data) strictly skip LLM rendering.
-- **Expanded Knowledge Base**: Added 11 new glosses (Family, Emotions, Time, etc.) -> Total 19 entries.
-  
-### Day 6 – Minimal LangChain Integration
-- **Bridge Pattern**: Wraps deterministic components in `BaseRetriever` and `RunnableLambda`.
-- **Orchestration, Not Reasoning**: LangChain handles the *flow* (Query -> Retriever -> Explainer -> Renderer) but **DOES NOT** make decisions.
-- **Why?**: Satisfies integration requirements while preserving 100% of the strict failure handling safety contract.
-
-### Day 7 – FastAPI Minimal Service
-- **Transport-Only**: FastAPI acts as a thin I/O shell with zero domain logic.
-- **Single Endpoint**: `POST /query` accepts `{"query": "string"}` and returns exactly one of:
-  - `{"answer": "..."}` — Direct or tentative response
-  - `{"ambiguity": {"candidates": [...]}}` — Multiple meanings or competing glosses
-  - `{"refusal": "..."}` — Out-of-domain or low-confidence rejection
-- **Pydantic Validation**: `model_validator` enforces exactly-one-of response constraint.
-- **Removable**: Deleting `main.py` does not break the core system.
-
-### Day 8 – Retrieval Quality & Evaluation
-- **Gold Evaluation Set**: 15 queries covering direct matches, OOD, ambiguity, and near-collision cases.
-- **Lightweight Metrics**:
-  - Top-1 Retrieval Accuracy: 66.7%
-  - Ambiguity Detection Accuracy: 100%
-  - OOD Rejection Rate: 100%
-  - False Confident Answers: 0
-- **Why Small Gold Sets Work**: For sign language, precision > recall. A small curated set verifies the system refuses uncertain queries rather than hallucinating.
-- **Refusals Are Correctness**: 100% OOD rejection with 0 false confident answers proves the system fails safely.
-
-## Project Structure
-
-```
-PSL-ExplainRAG/
+    <h2>Project Structure</h2>
+    <pre><code>PSL-ExplainRAG/
 │
-├── app/
-│   ├── bridge/        # LangChain wrappers (Day 6)
-│   ├── core/          # Logging and core utilities
-│   ├── domain/        # PSL domain schema + diagnostics
-│   ├── ingestion/     # Data loading and chunking
-│   ├── embeddings/    # Local embedding model
-│   ├── vectorstore/   # FAISS vector index
-│   ├── retrieval/     # Retrieval + confidence scoring + failure classification
-│   ├── explanation/   # Template-based explanation synthesis
-│   └── rendering/     # LLM rendering 
-│
-├── data/
-│   └── raw/           # PSL gloss knowledge (19 glosses)
-│
-├── scripts/
-│   ├── ingest_psl_data.py
-│   ├── build_and_query_index.py
-│   ├── test_langchain.py
-│
-├── eval/              # Evaluation Framework (Day 8)
-│   ├── queries.json
-│   └── run_eval.py
-│
-├── main.py            # FastAPI service (Day 7)
-├── requirements.txt
-└── README.md
-```
+├── app/            # Core logic and domain models
+├── data/raw/       # PSL gloss knowledge data
+├── scripts/        # Ingestion and build scripts
+├── eval/           # Evaluation Framework
+└── main.py         # FastAPI service layer</code></pre>
 
----
+    <hr>
 
-## Requirements
+    <h2>Requirements</h2>
+    <ul>
+        <li>Python 3.11 (highly recommended)</li>
+        <li>Visual C++ Redistributable (for PyTorch on Windows)</li>
+        <li>Ollama (Optional, for LLM rendering)</li>
+    </ul>
 
-- **Python 3.11** (recommended) — Python 3.13 has compatibility issues with PyTorch
-- **Visual C++ Redistributable** (Windows) — Required for PyTorch DLLs
-  - Download: https://aka.ms/vs/17/release/vc_redist.x64.exe
+    <hr>
 
-### Optional: Ollama (for LLM Rendering)
-
-If you want to use the `--use-llm` flag for natural language rendering:
-
-1. **Install Ollama**: Download from https://ollama.com/download (~1.2GB)
-2. **Pull the model**:
-   ```bash
-   ollama pull llama3.2:1b
-   ```
-3. **Recommended model**: `llama3.2:1b` (~1.3GB) — fast, good for rendering-only tasks
-
-> **Note**: The system works 100% without Ollama using deterministic templates.
-
----
-
-## How to Run the Project (I personally used CMD to run this project and activate environment)
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/MohibUllahKhanSherwani/PSL-ExplainRAG_V1.git
-cd PSL-ExplainRAG_V1
-```
-
-### 2. Create and Activate a Virtual Environment
-
-**Windows (Command Prompt):**
-```cmd
+    <h2>How to Run</h2>
+    <h3>1. Setup Environment</h3>
+    <pre><code># Windows (Command Prompt)
 py -3.11 -m venv .venv
 .venv\Scripts\activate.bat
-```
+pip install -r requirements.txt</code></pre>
 
-**Windows (PowerShell):**
-```powershell
-py -3.11 -m venv .venv
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate
-```
-
-**macOS/Linux:**
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-```
-
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run the Full Pipeline (CLI Mode)
-```bash
-# Default mode (deterministic templates, no LLM required)
+    <h3>2. Run Pipeline</h3>
+    <pre><code># CLI Mode
 python -m scripts.build_and_query_index
 
-# With LLM rendering (requires Ollama installed)
-python -m scripts.build_and_query_index --use-llm
-```
+# API Mode
+uvicorn main:app --reload</code></pre>
 
-This will:
-- Load PSL gloss knowledge (19 entries)
-- Generate semantic chunks
-- Build a FAISS vector index
-- Run test queries with confidence scoring
-- Generate grounded explanations
-- (Optional) Render via LLM if `--use-llm` flag is set
+    <hr>
 
-### 5. Run as API Service (FastAPI)
-```cmd
-:: Start the server
-uvicorn main:app --reload
-```
-
-**Test queries (CMD):**
-```cmd
-:: High confidence query (ambiguity - multiple meanings)
-curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"How do I say YES?\"}"
-
-:: OOD query (refusal)
-curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"What is the weather like?\"}"
-
-:: Direct query
-curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" -d "{\"query\": \"What does RUN mean?\"}"
-```
-
-**Response format** (exactly one field):
-```json
-{"answer": "..."}
-{"ambiguity": {"candidates": ["yes", "agree", "affirmative"]}}
-{"refusal": "I don't have reliable information..."}
-```
-
-### 6. Run Evaluation (Day 8)
-```bash
-python -m eval.run_eval
-```
-Produces metrics on:
-- Retrieval Accuracy
-- Ambiguity Detection
-- OOD Rejection Rate
-- False Confidence Count
-
----
-
-## Example Output
-
-```
-QUERY: What does RUN mean in PSL?
-============================================================
-Answer Type: DIRECT
-Confidence: HIGH
-Primary Gloss: RUN
-Has Ambiguity: True (within_gloss)
-
---- EXPLANATION ---
-The PSL sign "RUN" can mean: run, operate, flow.
-Meaning depends on whether the subject is a human, a machine, or a liquid.
-Examples: He runs every morning | The engine is running
-
-Ambiguity detected: Consider the context: Meaning depends on whether the 
-subject is a human, a machine, or a liquid.
-```
-
----
-
-## Confidence Levels
-
-| Level | Score Range | Response |
-|-------|-------------|----------|
-| **HIGH** | < 0.9 | Direct answer with full context |
-| **MEDIUM** | 0.9 - 1.4 | Tentative answer with caveats |
-| **LOW** | > 1.4 | Refusal — avoids hallucination |
-
----
-
-## Tech Stack
-- **Python 3.11**
-- **FastAPI** (REST API layer)
-- **LangChain** (orchestration, text splitting)
-- **Sentence-Transformers** (local embeddings with `all-MiniLM-L6-v2`)
-- **FAISS** (local vector similarity search)
-- **Pydantic** (request/response validation)
-- **Loguru** (structured logging)
-- **Ollama** (optional, local LLM for natural language rendering)
-- **NumPy** (metrics & density calculation)
-
----
-
-## Notes
-This project is intentionally kept local and reproducible to emphasize understanding of RAG fundamentals, system design, and applied AI reasoning.
+    <h2>Tech Stack</h2>
+    <ul>
+        <li>Python, FastAPI, LangChain</li>
+        <li>Sentence-Transformers, FAISS, Pydantic</li>
+        <li>Loguru, Ollama, NumPy</li>
+    </ul>
+</body>
+</html>
